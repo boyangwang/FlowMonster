@@ -1,0 +1,77 @@
+
+/*This section makes all box sizing to be border box, so that width is measured inclusive of border+padding*/
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Apply only when it's at least 768 */
+@media (min-width: 768px) {
+	.humburgur-button {
+	    display: none;
+	}
+}
+
+.humburgur-button {
+	/* logo-toggle-row-div is positioned (relative), so the button will be 2px and 0px from it */
+    position: absolute;
+    top: 2px;
+    right: 0;
+    /*color: #434857;*/
+    border-color: #434857;
+}
+
+.humburgur-button {
+    width: 40px;
+    padding: 10px;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+
+/* Use pseudo class ::before and margin, padding to display humburgur 
+It works this way: */
+.humburgur-button::before {
+    display: block;
+    width: 100%;
+    content: "";
+    padding-bottom: .125em;
+    border-top: .375em double;
+    border-bottom: .125em solid;
+    border-color: inherit;
+}
+
+.logo-toggle-row-div {
+	/* Because things need to be positioned relative to this */
+	position: relative;
+}
+
+.logo-toggle-row-div::after {
+	/* Should take up entire row */
+    clear: both;
+}
+
+button {
+	display: block;
+	cursor: pointer;
+}
+
+/* Make screen-reader-msg invisible but as if still on screen for screen-readers to pickup */
+.screen-reader-msg {
+	position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.logo-img {
+	width: 40px;
+	height: 40px;
+}
