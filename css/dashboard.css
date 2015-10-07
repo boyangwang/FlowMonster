@@ -21,3 +21,24 @@
 .clearboth-div {
 	clear:both;
 }
+
+th.header {
+	cursor: pointer;
+}
+
+.exceeded {
+    color: #e64759;
+}
+
+.safe {
+    color: #1bc98e;
+}
+
+.danger {
+	color: #FFCBC2;	
+	/*#E57C6B;*/
+}
+
+.position-div {
+	width: 12.5%;
+}
