@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- SiteMinder Encoding=ISO-8859-1; -->
+<html><!--Realm OID = 06-000f08b8-4e86-10c9-a8cf-9f47a94550b4--><head>
+	<title>SSO Login Page</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<script src="./js/environment.js"></script>
+	<script>
+
+		var app = {
+			loadScript:function(u){app.createEl('script',{src:u,type:'text/javascript'});},
+			loadStyle:function(u){app.createEl('link',{href:u,rel:'stylesheet',type:'text/css'});},
+			createEl:function(t,c){var e=document.createElement(t);for(var a in c) {e.setAttribute(a, c[a]);}document.getElementsByTagName("head")[0].appendChild(e);}
+		};
+
+		var frmId = 'Default';
+
+		config.is.Managed = self!== top && (/safari/i).test(navigator.userAgent);
+
+		if (config.is.Blackberry) {
+			app.loadStyle('css/mobile.css');
+		} else if (config.is.iOS || config.is.Android) {
+			frmId = 'HTML5';
+			app.createEl('meta', {name: 'viewport', content: 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0;'});
+			app.loadStyle('css/html5.css');
+		} else if (config.is.Desktop) {
+			app.loadStyle('css/screen.css');
+		}
+
+	</script><link type="text/css" rel="stylesheet" href="./css/screen.css">
+
+	<script>
+
+		//config.server.dmz = 1;
+
+		var bSuppressPrompt = false;
+
+		if (location.pathname === "/siteminderagent/SSOSuppressPrompt.fcc") {
+			bSuppressPrompt = true;
+		}
+
+		if (location.pathname !== "/siteminderagent/FramesTemp.fcc") {
+			if (top !== self && !config.is.Managed) {
+				top.location = self.location;
+			}
+		}
+
+		if (typeof(window.dialogArguments) !== 'undefined') {
+			window.returnValue = 'LOGIN';
+			window.close();
+		}
+
+		function submitForm() {
+
+			var frmLogin = document.getElementById('frm' + frmId),
+				txtUser = document.getElementById('txtUser' + frmId),
+				txtPass = document.getElementById('txtPass' + frmId),
+				txtTarget = document.getElementById('txtTarget' + frmId);
+
+			/**
+			 * Note: regular expression has additional '' to account for
+			 * mysterious code manipulation performed by server
+			 */
+			txtUser.value = txtUser.value.replace(/\s/, '');
+
+			if (!txtUser.value) {
+				alert("Please enter a valid Standard Id");
+				txtUser.focus();
+				return false;
+			} else if (!txtPass.value) {
+				alert("Please enter a valid password");
+				txtPass.focus();
+				return false;
+			} else {
+				if (bSuppressPrompt) {
+					if ((txtTarget.value.indexOf('http://') === 0) || (txtTarget.value.indexOf('HTTP://') === 0))  {
+						txtTarget.value = '/siteminderagent/blankredir.htm?' + txtTarget.value;
+					}
+				}
+			/**	frmLogin.submit(); **/
+				return true;
+			}
+		}
+
+		function receiveMessage(event) {
+			if (event.data.login && event.data.pass) {
+				var txtUser = document.getElementById('txtUser' + frmId);
+				var txtPass = document.getElementById('txtPass' + frmId);
+				txtUser.value = event.data.login;
+				txtPass.value = event.data.pass;
+				submitForm();
+			}
+		}
+
+		function init() {
+
+			// If the SSO Login page is loaded from the account disabled page due to excessive login attempts, redirect to mytechub
+			if(document.referrer.indexOf("smpwservicescgi.exe") != -1 && document.referrer.indexOf("SMAUTHREASON=24") != -1) {
+                        
+				// Check if intranet or DMZ
+				if (!config.server.dmz) {
+					var referLink = document.createElement('a');
+					referLink.href = config.server.mids;
+					document.body.appendChild(referLink);
+					referLink.click();
+				 }
+			}
+
+			/** Init fields and focus **/
+			var IDPARM = "strStdId=",
+				str = location.href,
+				txtUser = document.getElementById('txtUser' + frmId),
+				txtPass = document.getElementById('txtPass' + frmId);
+
+			txtPass.value = "";
+
+			if (str.lastIndexOf(IDPARM) > 0) {
+				txtUser.value = str.substring(str.lastIndexOf(IDPARM) + IDPARM.length, str.length);
+				txtPass.focus();
+			} else {
+				txtUser.focus();
+			}
+
+			//Update links based on environment
+			var links = document.getElementsByTagName('A');
+			for (var x = 0; x < links.length; x++) {
+				var a = links[x];
+				//Check if DMZ and intranet specific link
+				if (config.server.dmz && config.server.regexp.test(a.href)) {
+					//Hide this link
+					a.parentNode.style.display = 'none';
+				} else {
+					//Update host based on environment
+					a.href = a.href.replace(config.server.regexp, config.server.ids);
+					a.href = a.href.replace(config.server.myregexp, config.server.mids);	
+				}
+			}
+
+			if (config.is.Managed) {
+				window.addEventListener("message", receiveMessage, false);
+				top.postMessage({sso: 'challenge'}, '*');
+			}
+
+		}
+
+		window.onload = init;
+
+	</script>
+
+</head>
+<body>
+	<!--DEFAULT FORM-->
+	<div class="sso-desktop">
+		<form id="frmDefault" action="SSOlogin.fcc" method="post" autocomplete="OFF">
+
+			<input name="SMENC" value="ISO-8859-1" type="hidden">
+			<input name="SMLOCALE" value="US-EN" type="hidden">
+			<input name="location" id="location" type="hidden">
+			<input name="target" value="HTTP://trainingcentral.jpmorganchase.com/stc/student1/cst_top.htm" id="txtTargetDefault" type="hidden">
+			<input name="smauthreason" value="0" type="hidden">
+			<input name="smagentname" value="/pk2l6UJNnuVXQxkleM2hy297x50IRVkuT6egdIiqyIRM0l66aiIoGQ2MFYiQm6SQbbWSl4f5c3m9sC9I0LC7xT5W8hq40uj" type="hidden">
+			<input name="postpreservationdata" value="" type="hidden">
+
+			<div class="container">
+
+				<div class="headerbox">
+					<div class="headertitle">
+						<h2>SSO Login
+							<script>
+								document.write(' ' + config.server.region);
+								if (config.server.env !== "PROD") {
+									document.write('<font color="red"> - ' + config.server.env + '</font>');
+								}
+							</script> AMERICAS
+						</h2>
+					</div>
+				</div>
+
+				<div class="infobox">
+					<div class="infotitle">
+						<span><a href="https://smlogin.jpmchase.net/siteminderagent/sso/about_blue.htm"><img src="./img/signon_logo_transparent.gif" alt="Single Sign-On" height="22" width="118"></a></span>
+					</div>
+					<div class="infobody">
+						<div class="infocenter">
+							<table class="center">
+								<tbody><tr>
+									<td align="right"><b>Standard ID:</b></td>
+									<td align="left"><input name="USER" id="txtUserDefault" tabindex="1" class="logininput" type="text"></td>
+									<!--<td align="left"><a href="https://idserv.jpmchase.net/stdid_search.asp" target="_self">Standard ID Look-up</a></td>-->
+								</tr>
+								<tr><td>&nbsp;</td></tr>
+								<tr>
+									<td align="right"><b>Password:</b></td>
+									<td align="left"><input name="PASSWORD" id="txtPassDefault" tabindex="2" class="logininput" type="password"></td>
+									<td align="left"><a href="https://mytechub.jpmchase.net/v2/#/passwordresets/sso/prod/" target="_self">Reset/Forgot Password</a></td>
+								</tr>
+							</tbody></table>
+						</div>
+						<div class="infobtn">
+							<button tabindex="3"><a href="./dashboard.html" style="text-decoration: none; color: rgb(0,0,0);">login</a></button>
+						</div>
+					</div>
+					<div class="infofooter">
+						<div><a href="https://mytechub.jpmchase.net/v2/#/passwordresets/sso/prod/">Reset Vetting Information</a></div>
+						<div><a href="javascript:window.open('./sso/help2.htm','helpWindow','width=640,height=380,scrollbars=yes');void(0);">Single Sign-On Help</a></div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="tipbox">
+				<span><b>Tip:</b> You are able to use the same Standard ID and password on all sites that bear the Single Sign-On logo.</span>
+			</div>
+			<div class="alerttext">
+				<span>DO NOT BOOKMARK THIS PAGE. DO NOT ADD TO FAVORITES.</span>
+			</div>
+
+		</form>
+	</div>
+
+	<!--HTML5 FORM-->
+	<table class="sso-html5" style="height:100%; width:100%; position:absolute; top:0; left:0;">
+		<tbody><tr>
+			<td style="height: 43px;">
+				<div class="sso-toolbar sso-toolbar-top" style="height:43px;">
+					<span class="sso-help-icon" onclick="document.location='sso/help2.htm';"></span>
+					<div class="sso-toolbar-title">Single Sign-On
+						<script>
+							if (config.server.env !== "PROD") {
+								document.write('<span class="sso-toolbar-env"> - ' + config.server.env + '</span>');
+							}
+						</script>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
+				<form id="frmHTML5" style="width: 100%;" autocomplete="OFF">
+
+					<input name="SMENC" value="ISO-8859-1" type="hidden">
+					<input name="SMLOCALE" value="US-EN" type="hidden">
+					<input name="location" id="location" type="hidden">
+					<input name="target" value="HTTP://trainingcentral.jpmorganchase.com/stc/student1/cst_top.htm" id="txtTargetHTML5" type="hidden">
+					<input name="smauthreason" value="0" type="hidden">
+					<input name="smagentname" value="/pk2l6UJNnuVXQxkleM2hy297x50IRVkuT6egdIiqyIRM0l66aiIoGQ2MFYiQm6SQbbWSl4f5c3m9sC9I0LC7xT5W8hq40uj" type="hidden">
+					<input name="postpreservationdata" value="" type="hidden">
+
+					<div class="sso-body">
+						<div class="sso-fieldset">
+							<div class="sso-field">
+								<div class="sso-field-label"><span>Standard ID</span></div>
+								<div class="sso-field-container"><input class="sso-input-text" name="USER" id="txtUserHTML5" type="text"></div>
+							</div>
+							<div class="sso-field">
+								<div class="sso-field-label"><span>Password</span></div>
+								<div class="sso-field-container"><input class="sso-input-password" name="PASSWORD" id="txtPassHTML5" autocapitalize="off" type="password"></div>
+							</div>
+						</div>
+						<div class="sso-box-center">
+							<button tabindex="3"><a href="./dashboard.html">login</a></button>
+						</div>
+					</div>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td style="height: 17px;">
+				<div class="sso-toolbar sso-toolbar-bottom" style="height: 17px;">
+					<div class="sso-corporate-logo"></div>
+				</div>
+			</td>
+		</tr>
+	</tbody></table>
+
+
+
+</body></html>

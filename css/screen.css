@@ -1,0 +1,81 @@
+
+.sso-html5 {display:none;}
+
+* {margin:0; padding:0;}
+body {
+	background:#FFFFFF;
+	font-size:12px;
+	font-family:verdana, arial, sans-serif;
+	color:#000000;
+	background-image: url(../img/background.gif);
+	background-repeat:
+	repeat-x;
+}
+h2 {font-size:18px;}
+img {border-style:none;}
+a:link {color:#006699;}      /* unvisited link */
+a:visited {color:#006699;}  /* visited link */
+
+.container {width:680px;margin:10px auto;border:1px solid #BBBBBB;background:#FFFFFF;}
+.containerpop {width:620px;margin:2px auto;border:1px solid #BBBBBB;background:#FFFFFF;}
+
+.headerbox {border-bottom:1px solid #BBBBBB;background:#E7E7E7;padding-top:3px; padding-bottom:3px;}
+.headerbox h2 {display:block; font:"Verdana", verdana, arial, sans-serif; color:#424242;font-weight:bold;text-align:center;}
+
+.infobox {width:612px; margin:20px auto;padding: 7px 20px;}
+.infoboxpop {width:600px; margin:5px auto;padding: 2px 7px;}
+
+.infotitle {border:1px solid #BBBBBB;background:#AEAEAE;text-align:center;}
+.infotitle h3 {display:block; font:"Verdana", verdana, arial, sans-serif; color:#000000;font-weight:bold}
+
+.infobody {border:1px solid #BBBBBB;background:#FFFFFF;padding: 15px 15px;}
+
+.infohead {font-weight:bold;padding-bottom:10px;padding-top:10px;}
+.infocenter {
+	text-align:center;
+	padding-bottom:10px;
+	padding-top:10px;
+}
+.infocenterlarge {text-align:center;padding-bottom:10px;padding-top:10px;font:14px "Verdana", verdana, arial, sans-serif;font-weight:bold}
+
+.infolist li {
+	margin-bottom:10px;
+	padding-left:16px;
+}
+.infolist ul {list-style:square inside none;}
+.infolist > div:first-child {margin-top:0;}
+
+.infotext {padding-bottom: 10px;}
+
+.infoQuestion {
+	margin: 20px 0 10px 0;
+	padding-left:16px;
+	cursor:pointer;
+	background-image: url(../images/expand.gif);
+	background-repeat: no-repeat;
+	background-position: left 2px;
+	text-decoration:underline;
+	color:#006699;
+}
+.infoQuestion.expanded {
+	background-image: url(../images/collapse.gif);
+}
+.infoAnswer {
+	display:none;
+}
+
+.infoAssist {margin-top: 20px;}
+.infoAssist div {margin-bottom: 10px;}
+.infoAssist div:last-child {margin-bottom: 0;}
+
+.infobtn {text-align:center;padding-bottom:10px;}
+.infofooter {text-align:center;padding-top:10px;}
+
+.alerttext {display:block; text-align:center; font:12px "Verdana", verdana, arial, sans-serif; color:#FF0000;font-weight:bold;padding: 5px 5px;}
+.tipbox {display:block; text-align:center; padding: 5px 5px;}
+.logininput {width:100px;}
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
