@@ -2044,6 +2044,8 @@ input[type="button"].btn-block {
   min-height: 1px;
   padding-left: 15px;
   padding-right: 15px;
+  /*margin-left: 0.8%;
+  margin-right: 0.8%;*/
 }
 .fv, .fz, .gd, .gh, .gl, .gp, .gt, .gx, .hb, .hf, .hj, .hn {
   float: left;
@@ -2388,7 +2390,7 @@ input[type="button"].btn-block {
     width: 41.66666667%;
   }
   .gj {
-    width: 33.33333333%;
+    width: 15%;
   }
   .gf {
     width: 25%;
@@ -5053,7 +5055,6 @@ button.close {
 }
 .modal-dialog {
   position: relative;
-  width: auto;
   margin: 10px;
 }
 .modal-content {
@@ -5123,7 +5124,6 @@ button.close {
 }
 @media (min-width: 768px) {
   .modal-dialog {
-    width: 600px;
     margin: 30px auto;
   }
   .modal-content {
